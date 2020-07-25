@@ -66,12 +66,6 @@ function onRegisterSubmit() {
             return false;
     }
 
-    var pass_elem = document.createElement("input");
-    pass_elem.name = "password";
-    pass_elem.value = sha256(password);
-    pass_elem.style.display = "none";
-    document.getElementById("registerForm").appendChild(pass_elem);
-
     return true;
 }
 

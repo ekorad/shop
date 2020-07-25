@@ -1,5 +1,5 @@
 <?php
-require('./connect.php');
+require('./includes/connect.php');
 ?>
 
 <!DOCTYPE HTML>
@@ -7,9 +7,8 @@ require('./connect.php');
     <head>
         <meta charset="UTF-8" />
         <title>Înregistrare</title>
-        <script type="text/javascript" src="sha256.js"></script>
-        <script type="text/javascript" src="register.js"></script>
-        <link rel="stylesheet" type="text/css" href="register.css" />
+        <script type="text/javascript" src="scripts/register.js"></script>
+        <link rel="stylesheet" type="text/css" href="css/register.css" />
     </head>
     <body>
         <?php
@@ -46,8 +45,6 @@ require('./connect.php');
             $name = $_POST['name'];
             $gender = $_POST['gender'];
             $password = $_POST['password'];
-
-            
         }
         ?>
         <form id = "registerForm" method = "post"
@@ -79,7 +76,7 @@ require('./connect.php');
                 <span class = "tooltip">Email-ul introdus este invalid!</span>
             </div>
             <div class = "inputWrapper">
-                <input type = "password" id = "passwordField"
+                <input type = "password" id = "passwordField" name="password"
                        placeholder = "Parolă" onclick = "onInputFocus(this)" />
                 <span class = "tooltip"></span>
             </div>
