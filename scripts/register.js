@@ -1,4 +1,5 @@
 function onRegisterSubmit() {
+
     var tooltips = document.getElementsByClassName("tooltip");
     var i;
     for (i = 0; i < tooltips.length; i++) {
@@ -10,11 +11,16 @@ function onRegisterSubmit() {
     var name = document.getElementById("nameField").value;
     var email = document.getElementById("emailField").value;
     var password = document.getElementById("passwordField").value;
+    var statusSpan = document.getElementById("status");
 
+    statusSpan.innerHTML = "";
     if (email.length === 0 || name.length === 0 || password.length === 0) {
-        alert("Toate câmpurile trebuie completate!");
+        statusSpan.innerHTML = "Toate câmpurile trebuie completate!";
         return false;
     }
+
+    name = name.trim();
+    name = name.replace(/\s{2,}/g, ' ');
 
     if (!validateName(name)) {
         var tooltip = document.getElementById("nameField").nextSibling
@@ -24,6 +30,8 @@ function onRegisterSubmit() {
         }
         return false;
     }
+    
+    document.getElementById("nameField").value = name;
 
     if (!validateGender()) {
         var tooltip = document.getElementById("gendersContainer").nextSibling
@@ -70,8 +78,6 @@ function onRegisterSubmit() {
 }
 
 function validateName(name) {
-    name = name.trim();
-    name = name.replace(/\s{2,}/g, " ");
     var pattern = /^[a-zA-Z ]{2,}$/;
     if (!pattern.test(name)) {
         return false;
