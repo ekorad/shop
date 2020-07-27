@@ -1,5 +1,6 @@
 <?php
 require('./includes/connect.php');
+require('./includes/session.php');
 
 $status_code = 0;
 
@@ -41,6 +42,12 @@ if (isset($_GET['token']) && !empty($_GET['token'])) {
                 $status_code = -1;
                 $stmt_upd->close();
             }
+            
+            if ($status_code === -1 && isset($_SESSION['loggedIn'])
+                    && $_SESSION['loggedIn'] === true) {
+                $_SESSION['activated'] = true;
+                $status_code = -2;
+            }
         } else {
             $status_code = 1;
             $stmt->close();
@@ -61,7 +68,7 @@ if (isset($_GET['token']) && !empty($_GET['token'])) {
         <script>
             function onPageLoad() {
                 var ok = <?php echo $status_code; ?>;
-                if (ok === -1) {
+                if (ok < 0) {
                     setTimeout(function () {
                         window.location.href = "login.php";
                     }, 5000);
@@ -78,6 +85,8 @@ if (isset($_GET['token']) && !empty($_GET['token'])) {
                     echo "A apărut o eroare! Te rugăm să încerci din nou.";
                 } else if ($status_code === -1) {
                     echo "Contul a fost activat cu succes! În scurt timp vei fi redirecționat către pagina de logare. Click <a href='login.php'>aici</a> dacă nu vrei să aștepți.";
+                } else if ($status_code === -2) {
+                    echo "Contul a fost activat cu succes! În scurt timp vei fi redirecționat către pagina principală. Click <a href='index.php'>aici</a> dacă nu vrei să aștepți.";
                 }
                 ?>
             </span>

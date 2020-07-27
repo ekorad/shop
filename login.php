@@ -1,9 +1,57 @@
 <?php
 require('./includes/connect.php');
+require('./includes/session.php');
 
-session_name("SessionID");
-session_start();
-setcookie(session_name(), session_id(), time() + 365 * 24 * 60 * 60, "/");
+if (isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] === true) {
+    header("Location: index.php");
+    exit;
+}
+
+$status_code = 0;
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['loginSub'])) {
+    if (isset($_POST['email']) && !empty($_POST['email'])) {
+        $email = $_POST['email'];
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $status_code = 1;
+        }
+    }
+
+    if (!$status_code) {
+        $password = $_POST['password'];
+
+        $sql = "SELECT `id`, `password`, `activated` FROM `users` WHERE `email` = ?";
+        $stmt = $conn->prepare($sql);
+        $db_hash = NULL;
+        $db_id = NULL;
+        $db_act = 0;
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $stmt->store_result();
+
+        if ($stmt->num_rows === 1) {
+            $stmt->bind_result($db_id, $db_hash, $db_act);
+            $stmt->fetch();
+
+            $salt = substr($db_hash, 0, 4) . substr($db_hash, 68, 4);
+            $hash = hash("sha256", $password . $salt);
+            
+            $db_pass_hash = substr($db_hash, 4, 64);
+            if ($hash !== $db_pass_hash) {
+                $status_code = 3;
+            } else {
+                $_SESSION['loggedIn'] = true;
+                $_SESSION['activated'] = ($db_act ? true : false);
+                
+                $stmt->close();
+                header("Location: index.php");
+            }
+        } else {
+            $status_code = 2;
+        }
+        $stmt->close();
+    }
+}
 ?>
 
 <!DOCTYPE HTML>
@@ -22,7 +70,13 @@ setcookie(session_name(), session_id(), time() + 365 * 24 * 60 * 60, "/");
             <h1>Shop</h1>
             <span id="status">
                 <?php
-                // handle errors
+                    if ($status_code === 1) {
+                        echo "A apărut o eroare! Te rugăm să încerci din nou.";
+                    } else if ($status_code === 2) {
+                        echo "Contul cu emailul specificat nu a fost găsit!";
+                    } else if ($status_code === 3) {
+                        echo "Combinația email-parolă este incorectă! Te rugăm să încerci din nou.";
+                    }
                 ?></span>
             <div class = "inputWrapper" style="margin-top: 15px">
                 <input type = "text" name = "email" id = "emailField"
