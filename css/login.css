@@ -20,27 +20,8 @@ form {
     margin-bottom: 20px;
 }
 
-input, button, label {
+input, button {
     font-size: 1.2em;
-}
-
-.genderContainer {
-    padding: 5px 5px;
-    display: inline-block;
-    cursor: pointer;
-}
-
-.genderContainer:hover {
-    color: lightgray;
-}
-
-label {
-    cursor: pointer;
-    transition: color .15s ease-in-out;
-}
-
-input[type="radio"] {
-    cursor: pointer;
 }
 
 input[type="text"], input[type="password"] {
@@ -110,10 +91,6 @@ button:hover {
 .tooltip.toggled {
     visibility: visible;
     opacity: 1;
-}
-
-input[type="radio"] {
-    outline: none;
 }
 
 form a {

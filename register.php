@@ -81,6 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['regSub'])) {
         <meta charset="UTF-8" />
         <title>Înregistrare</title>
         <script type="text/javascript" src="scripts/register.js"></script>
+        <link rel="stylesheet" type="text/css" href="css/generic.css" />
         <link rel="stylesheet" type="text/css" href="css/register.css" />
     </head>
     <body>
@@ -95,7 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['regSub'])) {
                 } else if ($ud_error === 2) {
                     echo "Un utilizator cu acest email există deja!";
                 } else if ($ud_error === -1) {
-                    
+                    echo "Contul a fost înregistrat cu succes! Te rugăm să iți verifici email-ul pentru activarea contului.";
                 }
                 ?></span>
             <div class = "inputWrapper" style="margin-top: 15px;">
@@ -129,8 +130,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['regSub'])) {
                 <span class = "tooltip"></span>
             </div>
             <button type = "submit" name = "regSub">Înregistrare</button>
-            <a href = "#" style = "float: left">Conectare</a>
-            <a href = "#" style = "float: right">Mi-am uitat parola</a>
+            <a href = "login.php" style = "float: left">Conectare</a>
+            <a href = "forgotten.php" style = "float: right">Mi-am uitat parola</a>
         </form>
     </body>
 </html>
